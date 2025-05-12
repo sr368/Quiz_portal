@@ -23,11 +23,12 @@ A web-based Quiz Portal for students and admins built using *Flask* and *MySQL*.
 ## Folder Structure
 
 quiz_portal/templates/# it contains all html files
+
 quiz_portal/images/#it contains all images
 quiz_portal/app.py /#main  flask application
 quiz_portal/README.md/#project documentation
 
-##setup instructions
+## Setup instructions
  1.clone the repiository
  2.install dependencies
  3.run the app
