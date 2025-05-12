@@ -32,8 +32,11 @@ quiz_portal/README.md/#project documentation
 
 ## Setup instructions
  1.clone the repiository
+ 
  2.install dependencies
+ 
  3.run the app
+ 
  4.open your browser and visit the application
 
 ## Licence
