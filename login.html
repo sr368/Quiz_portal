@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            background-image:url("{{url_for('static',filename='images/20.jpg')}}") ;background-size: 80%;
+        }
+        .fade {
+            transition: opacity 0.5s ease-in-out;
+        }
+    </style>
+</head>
+<body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="container mx-auto p-4">
+        <div class="flex flex-col md:flex-row justify-center items-center space-y-6 md:space-y-0 md:space-x-6">
+            <!-- Left Section (Dynamic Image) -->
+            <div class="w-full md:w-1/2 flex justify-center">
+                <img id="login-image" src="{{url_for('static',filename='images/img.1.jpg')}}" alt="Login Image" class="w-72 md:w-80 fade">
+            </div>
+
+            <!-- Right Section (Login Forms) -->
+            <div class="w-full md:w-1/2 bg-white p-8 rounded-lg shadow-lg">
+                <div class="flex justify-center mb-6">
+                    <button id="student-tab" class="w-1/2 text-center py-2 px-4 bg-blue-500 text-white rounded-t-lg focus:outline-none">Student Login</button>
+                    <button id="admin-tab" class="w-1/2 text-center py-2 px-4 bg-gray-200 text-gray-700 rounded-t-lg focus:outline-none">Admin Login</button>
+                </div>
+
+                <!-- Student Login -->
+                <div id="student-login" class="p-4">
+                    <h2 class="text-2xl font-bold mb-6 text-center">Student Login</h2>
+                    <form   action ="{{url_for ('login')}}" method="POST">
+                        
+                        
+                        <div class="mb-4">
+                            <label for="student-Email" class="block text-gray-700">Email</label>
+                            <div class="flex items-center border rounded-lg px-4 py-2">
+                                <i class="fas fa-lock text-gray-500"></i>
+                                <input type="email" id="student-email" name="email" class="w-full px-2 focus:outline-none" placeholder="Enter your Email">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="student-password" class="block text-gray-700">Password</label>
+                            <div class="flex items-center border rounded-lg px-4 py-2 relative">
+                                <i class="fas fa-lock text-gray-500 mr-2"></i>
+                                <input type="password" id="student-password" name="password" class="w-full px-2 focus:outline-none pr-10" placeholder="Enter your password">
+                                <i class="fas fa-eye absolute right-3 top-3 text-gray-500 cursor-pointer" onclick="togglePassword('student-password', this)"></i>
+                            </div>
+                        </div>
+                        <div class="mb-4 text-right">
+                            <a href="{{url_for('signup')}}" class="text-blue-500 hover:underline">New to portal?sign Up</a>
+                        </div>
+                        <div>
+                        </div>
+                        <div class="mb-4 text-left">
+                            <a href="{{url_for('password')}}" class="text-blue-500 hover:underline">Forgot Password</a>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none">Submit</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Admin Login -->
+                <div id="admin-login" class="p-4 hidden">
+                    <h2 class="text-2xl font-bold mb-6 text-center">Admin Login</h2>
+                    <form>
+                        
+                        
+                        <div class="mb-4">
+                            <label for="admin-email" class="block text-gray-700">Email</label>
+                            <div class="flex items-center border rounded-lg px-4 py-2">
+                                <i class="fas fa-user text-gray-500"></i>
+                                <input type="email" id="admin-email" class="w-full px-2 focus:outline-none" placeholder="Enter your Email">
+                            </div>
+                        </div>
+                        <div class="mb-4">
+                            <label for="admin-password" class="block text-gray-700">Password</label>
+                            <div class="flex items-center border rounded-lg px-4 py-2 relative">
+                                <i class="fas fa-lock text-gray-500 mr-2"></i>
+                                <input type="password" id="admin-password" class="w-full px-2 focus:outline-none pr-10" placeholder="Enter your password">
+                                <i class="fas fa-eye absolute right-3 top-3 text-gray-500 cursor-pointer" onclick="togglePassword('admin-password', this)"></i>
+                            </div>
+                        </div>
+                        <div>
+                            <button type="submit" class="w-full bg-blue-500 text-white px-4 py-2 rounded-lg hover:bg-blue-600 focus:outline-none">Submit</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.getElementById('student-tab').addEventListener('click', function() {
+            document.getElementById('student-login').classList.remove('hidden');
+            document.getElementById('admin-login').classList.add('hidden');
+            
+            this.classList.add('bg-blue-500', 'text-white');
+            this.classList.remove('bg-gray-200', 'text-gray-700');
+            document.getElementById('admin-tab').classList.remove('bg-blue-500', 'text-white');
+            document.getElementById('admin-tab').classList.add('bg-gray-200', 'text-gray-700');
+
+            // Change Image for Student Login
+            let loginImage = document.getElementById('login-image');
+            loginImage.style.opacity = 0;
+            setTimeout(() => {
+                loginImage.src = "{{url_for('static',filename='images/img.1.jpg')}}";
+                loginImage.style.opacity = 1;
+            }, 300);
+        });
+
+        document.getElementById('admin-tab').addEventListener('click', function() {
+            document.getElementById('admin-login').classList.remove('hidden');
+            document.getElementById('student-login').classList.add('hidden');
+            
+            this.classList.add('bg-blue-500', 'text-white');
+            this.classList.remove('bg-gray-200', 'text-gray-700');
+            document.getElementById('student-tab').classList.remove('bg-blue-500', 'text-white');
+            document.getElementById('student-tab').classList.add('bg-gray-200', 'text-gray-700');
+
+            // Change Image for Admin Login
+            let loginImage = document.getElementById('login-image');
+            loginImage.style.opacity = 0;
+            setTimeout(() => {
+                loginImage.src ="{{url_for('static',filename='images/img.2.jpg')}}";
+                loginImage.style.opacity = 1;
+            }, 300);
+        });
+
+        function togglePassword(fieldId, icon) {
+            const input = document.getElementById(fieldId);
+            if (input.type === "password") {
+                input.type = "text";
+                icon.classList.remove('fa-eye');
+                icon.classList.add('fa-eye-slash');
+            } else {
+                input.type = "password";
+                icon.classList.remove('fa-eye-slash');
+                icon.classList.add('fa-eye');
+            }
+        }
+    </script>
+</body>
+</html>

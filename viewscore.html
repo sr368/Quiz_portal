@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Score</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-image:url("{{url_for('static',filename='images/10.avif')}}") ;background-size: 100%;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+            overflow-y: auto;
+        }
+
+        /* Scrollbar Styling */
+        body::-webkit-scrollbar {
+            width: 10px;
+        }
+        body::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.2);
+        }
+        body::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+        }
+
+        h2 {
+            text-align: center;
+            color: #fff;
+            font-size: 30px;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 700px;
+            margin: auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-height: 60vh; /* Smaller background */
+            overflow-y: auto;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .container::-webkit-scrollbar {
+            width: 8px;
+        }
+        .container::-webkit-scrollbar-thumb {
+            background-color: #ccc;
+            border-radius: 10px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+            font-size: 20px;
+        }
+
+        th {
+            background: #007bff;
+            color: white;
+        }
+
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+
+        tr:hover {
+            background: #e3f2fd;
+        }
+
+        .download-btn {
+            display: inline-block;
+            padding: 6px 12px;
+            font-size: 20px;
+            background: #28a745;
+            color: white;
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .download-btn:hover {
+            background: #218838;
+        }
+    </style>
+</head>
+<body>
+
+<h2>Your Score</h2>
+
+<div class="container">
+    <table>
+        <thead>
+            <tr>
+                <th>Subject</th>
+                <th>Date</th>
+                <th>Score</th>
+                <th>Download</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% if scores %}
+                {% for score in scores %}
+                    <tr>
+                        <td>{{ score.subject }}</td>
+                        <td>{{ score.dates }}</td>  <!-- Assuming date field is passed -->
+                        <td>{{ score.score }}</td>
+                        <td>
+                            <a class="download-btn" href="{{ url_for('download_score', email=email, subject=score.subject) }}">
+                                Download
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="4" style="text-align: center; color: #888;">No scores available.</td>
+                </tr>
+            {% endif %}
+        </tbody>
+    </table>
+</div>
+
+</body>
+</html>

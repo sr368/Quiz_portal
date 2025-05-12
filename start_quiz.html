@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Trivia Quiz</title>
+  <style>
+    body {
+        margin: 0;
+        padding: 0;
+        background-image:url("{{url_for('static',filename='images/93719.jpeg')}}") ;background-size: 100%;
+        font-family: 'Arial', sans-serif;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .quiz-wrapper {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 40px;
+        flex-wrap: wrap;
+    }
+
+    .question-circle {
+        background: MediumSeaGreen;
+        width: 300px;
+        height: 300px;
+        border-radius: 50%;
+        box-shadow: 0 0 10px #00000033;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        font-weight: bold;
+        text-align: center;
+        padding: 20px;
+        margin-right: 50px;
+    }
+
+    .options-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .option {
+        background: white;
+        border: 3px solid #000;
+        border-radius: 50px;
+        padding: 15px 30px;
+        font-size: 30px;
+        font-weight: bold;
+        color: black;
+        width: 250px;
+        text-align: left;
+        position: relative;
+        cursor: pointer;
+        transition: 0.3s ease;
+    }
+
+    .option:hover {
+        background: #fff599;
+    }
+
+    .option input {
+        display: none;
+    }
+
+    .option-label {
+        display: inline-block;
+    }
+
+    .option span.letter {
+        background: blue;
+        color: white;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        display: inline-flex;
+        justify-content: center;
+        align-items: center;
+        margin-right: 10px;
+        font-size: 16px;
+    }
+
+    .option.selected {
+        background-color: #a2f5a2 !important;
+        border-color: green;
+    }
+
+    .controls {
+        margin-top: 40px;
+    }
+
+    .btn {
+        padding: 12px 25px;
+        margin: 10px;
+        background: black;
+        color: white;
+        border: none;
+        border-radius: 30px;
+        font-weight: bold;
+        cursor: pointer;
+        font-size: 16px;
+    }
+
+    .btn:disabled {
+        background: #888;
+    }
+
+    .timer {
+        margin-top: 20px;
+        font-size: 20px;
+        font-weight: bold;
+        color: #d10000;
+    }
+  </style>
+  <script>
+    var totalTime = 20 * 60;
+    var currentQuestion = 1;
+    var totalQuestions = {{ questions|length }};
+
+    function startTimer() {
+        var timerElement = document.getElementById('timer');
+        var interval = setInterval(function () {
+            var minutes = Math.floor(totalTime / 60);
+            var seconds = totalTime % 60;
+            timerElement.innerHTML = "Time Left: " + minutes + ":" + (seconds < 10 ? "0" : "") + seconds;
+            if (totalTime <= 0) {
+                clearInterval(interval);
+                alert("Time is up!");
+                document.getElementById("quiz-form").submit();
+            }
+            totalTime--;
+        }, 1000);
+    }
+
+    function showQuestion(index) {
+        document.querySelectorAll(".quiz-wrapper").forEach(q => q.style.display = "none");
+        document.getElementById("question" + index).style.display = "flex";
+        document.getElementById("prev-btn").disabled = (index === 1);
+        document.getElementById("next-btn").disabled = (index === totalQuestions);
+    }
+
+    function nextQuestion() {
+        const radios = document.querySelectorAll('input[name="q' + currentQuestion + '"]');
+        let answered = false;
+        for (let radio of radios) {
+            if (radio.checked) {
+                answered = true;
+                break;
+            }
+        }
+        if (!answered) {
+            alert("Please select an option before moving to the next question.");
+            return;
+        }
+
+        if (currentQuestion < totalQuestions) {
+            currentQuestion++;
+            showQuestion(currentQuestion);
+        }
+    }
+
+    function prevQuestion() {
+        if (currentQuestion > 1) {
+            currentQuestion--;
+            showQuestion(currentQuestion);
+        }
+    }
+
+    function highlightSelectedOption() {
+        const allOptions = document.querySelectorAll('.options-container');
+        allOptions.forEach(container => {
+            const labels = container.querySelectorAll('.option');
+            labels.forEach(label => {
+                const input = label.querySelector('input');
+                input.addEventListener('change', () => {
+                    labels.forEach(l => l.classList.remove('selected'));
+                    if (input.checked) {
+                        label.classList.add('selected');
+                    }
+                });
+            });
+        });
+    }
+
+    window.onload = function () {
+        startTimer();
+        showQuestion(1);
+        highlightSelectedOption();
+    };
+  </script>
+</head>
+<body>
+  <h1 class="header">Trivia Quiz</h1>
+  <div class="timer" id="timer">Time Left: 20:00</div>
+
+  <form id="quiz-form" method="post" action="{{ url_for('submit_quiz', quiz_id=quiz_id) }}">
+    {% for question in questions %}
+    <div class="quiz-wrapper" id="question{{ loop.index }}" style="display: none;">
+      <div class="question-circle">
+        <div style="font-size: 32px; color: black;">{{ question.question_text }}</div>
+      </div>
+      <div class="options-container">
+        <label class="option">
+          <input type="radio" name="q{{ loop.index }}" value="1" />
+          <span class="letter">A</span>
+          <span class="option-label">{{ question.option_a }}</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="q{{ loop.index }}" value="2" />
+          <span class="letter">B</span>
+          <span class="option-label">{{ question.option_b }}</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="q{{ loop.index }}" value="3" />
+          <span class="letter">C</span>
+          <span class="option-label">{{ question.option_c }}</span>
+        </label>
+        <label class="option">
+          <input type="radio" name="q{{ loop.index }}" value="4" />
+          <span class="letter">D</span>
+          <span class="option-label">{{ question.option_d }}</span>
+        </label>
+      </div>
+    </div>
+    {% endfor %}
+
+    <div class="controls">
+      <button type="button" class="btn" id="prev-btn" onclick="prevQuestion()" disabled>Previous</button>
+      <button type="button" class="btn" id="next-btn" onclick="nextQuestion()">Next</button>
+      <button type="submit" class="btn">Submit</button>
+    </div>
+  </form>
+</body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Questions</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f9fa;
+        }
+        header {
+            background-color: #343a40;
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+        }
+        .container {
+            width: 50%;
+            margin: auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input, textarea, select {
+            width: 100%;
+            padding: 10px;
+            margin-top: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .btn {
+            background-color: green;
+            color: white;
+            padding: 10px;
+            margin-top: 15px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+        }
+        .btn:hover {
+            background-color: darkgreen;
+        }
+    </style>
+</head>
+<body>
+
+    <header>Add Questions</header>
+
+    <div class="container">
+        <form action="{{ url_for ('add_questions',quiz_id=quiz_id )}}" method="POST">
+            <input type="hidden" name="quiz_id" value="{{ quiz_id }}">
+
+            <label for="question">Question:</label>
+            <textarea id="question" name="question_text" placeholder="Enter Question" rows="6"  cols="40" required></textarea>
+
+            <label>Option 1:</label>
+            <input type="text" name="option_a" placeholder="Enter Option 1" required>
+
+            <label>Option 2:</label>
+            <input type="text" name="option_b" placeholder="Enter Option 2" required>
+
+            <label>Option 3:</label>
+            <input type="text" name="option_c" placeholder="Enter Option 3" required>
+
+            <label>Option 4:</label>
+            <input type="text" name="option_d" placeholder="Enter Option 4" required>
+
+            <label>Correct Answer:</label>
+            <input type="text" name='correct_option'placeholder="Enter correct option" required>
+
+            <label>Explanation for Wrong Answers:</label>
+            <textarea name="explanation" placeholder="Provide an explanation for incorrect choices" required></textarea>
+
+            <button type="submit" class="btn">Add Question</button>
+
+        </form>
+    </div>
+
+</body>
+</html>

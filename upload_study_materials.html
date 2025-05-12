@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload Study Materials</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f8f9fa;background-image:url("{{url_for('static',filename='images/30.jpg')}}") ;background-size: 100%;}
+        header { background-color: #343a40; color: white; padding: 20px; text-align: center; font-size: 24px; }
+        .container { width: 50%; margin: auto; padding: 20px; background: white; border-radius: 10px; margin-top: 80px; box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); text-align: center; }
+        label { font-size: 28px; font-weight: bold; display: block; margin-top: 10px; }
+        input[type="file"], input[type="text"] { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 5px; }
+        button { background-color: #28a745; color: white; padding: 10px 20px; border: none; margin-top: 15px; font-size: 28px; cursor: pointer; border-radius: 5px; }
+        button:hover { background-color: #218838; }
+    </style>
+</head>
+<body>
+
+    <header>Upload Study Materials</header>
+
+    <div class="container">
+        <form action="{{ url_for('upload_study_materials')}}" method="post" enctype="multipart/form-data">
+            <label for="title">Study Material Title:</label>
+            <input type="text" id="title" name="title" placeholder="Enter material title" required>
+
+            <label for="file">Select File:</label>
+            <input type="file" id="file" name="file" accept=".pdf, .docx, .pptx" required>
+
+            <button type="submit">Upload</button>
+        </form>
+    </div>
+
+</body>
+</html>

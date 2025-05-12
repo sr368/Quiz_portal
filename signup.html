@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <style>
+        body { font-family: Arial, sans-serif; text-align: center; background-image:url("{{url_for('static',filename='images/20.jpg')}}") ;background-size: 100%; }
+        form { display: inline-block; text-align: left; }
+        .container { margin-top: 80px;font-size: 28px }
+        input { display: block; margin: 10px 0; padding: 8px; width: 250px; }
+        button { padding: 10px; width: 100%; background-color: blue; color: white; }
+        .passkey-box { margin-top: 60px; padding: 10px; border: 2px solid green; display: inline-block; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Signup</h2>
+        <form action="{{ url_for('signup') }}" method="post">
+            <label>Name:</label>
+            <input type="text" name="name" required>
+
+            <label>Email:</label>
+            <input type="email" name="email" required>
+
+            <label>Password:</label>
+            <input type="password" name="password" required>
+
+            <button type="submit">Signup</button>
+        </form>
+
+        <!-- Display flash messages -->
+        {% with messages = get_flashed_messages(with_categories=true) %}
+            {% if messages %}
+                {% for category, message in messages %}
+                    <p style="color: {% if category == 'danger' %}red{% else %}green{% endif %};">
+                        {{ message }}
+                    </p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <!-- Display PASKET if generated -->
+        {% if passkey %}
+            <div class="passkey-box">
+                <p><strong>Your PASSKEY:</strong> {{ passkey }}</p>
+                <p style="color: red;">Please save this for future use.</p>
+            </div>
+        {% endif %}
+    </div>
+</body>
+</html>
